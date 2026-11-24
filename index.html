@@ -63,8 +63,24 @@ button:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
 .rh div{background:rgba(0,0,0,.3);border:1px solid var(--bd);border-radius:12px;padding:6px 20px;text-align:center}
 .rh span{display:block;font-size:12px;color:var(--mu)}
 .rh b{font:700 30px Amiri,serif;color:var(--gold2)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.tools button{padding:6px 14px;font-size:13px}
 .leg{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin-top:12px}
 .leg i{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin-inline-end:5px}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tabs button.on{border-color:var(--gold);color:var(--gold2);background:rgba(207,169,95,.1)}
+.lb{display:block;color:var(--gold);font-weight:700;font-size:14px;margin:14px 0 6px}
+#tn{width:100%;max-width:340px;background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;color:var(--ink);font:400 22px Amiri,serif;outline:none}
+#tn:focus{border-color:var(--gold)}
+.tb{width:100%;border-collapse:collapse;margin-top:12px}
+.tb td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+.tb input.t{width:100%;background:transparent;border:1px solid transparent;color:var(--ink);font:400 22px Amiri,serif;padding:2px 8px;border-radius:8px;outline:none}
+.tb input.t:focus{border-color:var(--gold)}
+.tb tr.out td{background:rgba(255,107,107,.09)}
+.tb .pat{margin:0 8px}
+.tb .fl{color:var(--bad);font-size:13px;white-space:nowrap}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.mrow button,.btns button.sm{padding:4px 14px;font-size:13px}
 footer{text-align:center;color:var(--mu);font-size:13px;margin-top:30px}
 @media(max-width:700px){.io{grid-template-columns:1fr}.logo{font-size:54px}.mname{font-size:34px}}
 </style>
@@ -77,7 +93,8 @@ footer{text-align:center;color:var(--mu);font-size:13px;margin-top:30px}
   <p class="sub">اكتب البيت وشوف وزنه وتفعيلاته ومواضع الكسر فيه</p>
 </header>
 
-<section class="card">
+<nav class="tabs"><button id="tA" class="on">تحليل بيت</button><button id="tT">تدريب على قصائد</button></nav>
+<div id="va"><section class="card">
   <div class="io">
     <div><label for="sadr">الصدر</label><textarea id="sadr" spellcheck="false" placeholder="اكتب الشطر الأول هنا"></textarea></div>
     <div><label for="ajuz">العجز</label><textarea id="ajuz" spellcheck="false" placeholder="اكتب الشطر الثاني هنا"></textarea></div>
@@ -87,16 +104,41 @@ footer{text-align:center;color:var(--mu);font-size:13px;margin-top:30px}
     <button id="ex">مثال تجريبي</button>
     <button id="clr">مسح</button>
   </div>
-  <p class="hint">للدقة أضف التشكيل (الفتحة والضمة والكسرة والسكون والشدّة) في الكلمات الملتبسة، والتحليل يتحدّث مباشرة. اضغط Ctrl + Enter للتحليل السريع.</p>
+  <p class="hint">اكتب الهمزة (أ) في الكلمات اللي ما هي «ال» التعريف، مثل «ألوم» وليس «الوم»، وأضف التشكيل (الفتحة والضمة والكسرة والسكون والشدّة) في الكلمات الملتبسة، والتحليل يتحدّث مباشرة. اضغط Ctrl + Enter للتحليل السريع.</p>
 </section>
 
-<div id="out"></div>
+<div id="out"></div></div>
+<div id="vt" hidden>
+<section class="card">
+  <div class="h">علّم الأداة وزناً من قصائد كاملة</div>
+  <label class="lb" for="tn">اسم الوزن</label>
+  <input id="tn" list="tnl" placeholder="مثل: المسحوب">
+  <datalist id="tnl"></datalist>
+  <label class="lb" for="tp">القصيدة: بيت في كل سطر، وافصل بين الصدر والعجز بعلامة / أو * أو ثلاث مسافات. وإذا كان كل شطر في سطر فلا تحتاج فاصلاً.</label>
+  <textarea id="tp" rows="8" spellcheck="false" placeholder="ألصق القصيدة هنا"></textarea>
+  <div class="btns"><button class="pri" id="tgo">حلّل القصيدة</button></div>
+  <div id="tr"></div>
+</section>
+<section class="card">
+  <div class="h">ما تعلّمته الأداة</div>
+  <div id="ml"></div>
+  <div class="btns"><button id="exp">تصدير learned.json</button><button id="imp">استيراد ملف</button><input type="file" id="impf" accept=".json" hidden></div>
+  <p class="hint">التعلّم محفوظ في متصفحك على هذا الجهاز فقط. صدّره وارفع الملف باسم learned.json في نفس مجلد index.html على الـ repo، فيستفيد منه كل من يفتح الموقع.</p>
+</section>
+</div>
 <footer>يعمل كاملاً داخل المتصفح، بدون خوادم وبدون API.</footer>
 </div>
 
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const ea=s=>esc(s).replace(/"/g,'&quot;');
+const DIA=/[\u064B-\u0652]/g, HAS=/[\u064B-\u0652]/;
+const ls=(k,d)=>{try{return JSON.parse(localStorage.getItem(k)||d)}catch(e){return JSON.parse(d)}};
+const ss=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let REMOTE={mz:[],mzw:{}},WD={};
+const loadW=()=>{WD=Object.assign({},REMOTE.mzw||{},ls('mzw','{}'))};
+const fixw=w=>HAS.test(w)?w:(WD[w]||w);
 
 /* ───── جدول التفعيلات والبحور (1 = متحرك، 0 = ساكن) ───── */
 const T={'فعولن':'11010','مفاعيلن':'1101010','فاعلن':'10110','مستفعلن':'1010110','فاعلاتن':'1011010','مفاعلتن':'1101110','متفاعلن':'1110110','مفعولات':'1010101'};
@@ -105,10 +147,10 @@ const METERS=[
 ['البسيط','مستفعلن فاعلن مستفعلن فاعلن'],['الوافر','مفاعلتن مفاعلتن فعولن'],
 ['الكامل','متفاعلن متفاعلن متفاعلن'],['الهزج','مفاعيلن مفاعيلن'],
 ['الرجز','مستفعلن مستفعلن مستفعلن'],['الرمل','فاعلاتن فاعلاتن فاعلاتن'],
-['السريع','مستفعلن مستفعلن فاعلن'],['المنسرح','مستفعلن مفعولات مستفعلن'],
+['السريع','مستفعلن مستفعلن فاعلن'],['المنسرح','مستفعلن مفعولات مستفعلن'],['المضارع','مفاعيلن فاعلاتن مفاعيلن'],['المقتضب','مفعولات مستفعلن مستفعلن'],
 ['الخفيف','فاعلاتن مستفعلن فاعلاتن'],['المتقارب','فعولن فعولن فعولن فعولن'],
 ['المتدارك','فاعلن فاعلن فاعلن فاعلن'],['المجتث','مستفعلن فاعلاتن']
-].map(([n,t])=>{const taf=t.split(' ');let o=0;const offs=taf.map(x=>{const s=o;o+=T[x].length;return s});return{n,taf,offs,p:taf.map(x=>T[x]).join('')}});
+].map(([n,t])=>{const taf=t.split(' ');let o=0;const offs=taf.map(x=>{const s=o;o+=T[x].length;return s});const p=taf.map(x=>T[x]).join('');return{n,taf,offs,p,ps:[p]}});
 
 /* ───── طبقة النطق ───── */
 const SH=new Set('تثدذرزسشصضطظلن');
@@ -155,7 +197,7 @@ function units(raw){
 }
 
 function analyze(txt){
-  const ws=txt.trim().split(/\s+/).filter(Boolean).map(w=>({w,U:units(w)})).filter(o=>o.U);
+  const ws=txt.trim().split(/\s+/).filter(Boolean).map(w=>({w,U:units(fixw(w))})).filter(o=>o.U);
   ws.forEach((o,wi)=>{
     const w=o.U.find(u=>u.w); if(!w)return;
     let p=null;
@@ -185,6 +227,17 @@ function align(p,m){
     else{miss[i]=(miss[i]||0)+1;j--}
   }
   return{score:bs,ops,mi,miss};
+}
+
+/* ───── أوزان محفوظة: بذرة + ما يعتمده المستخدم ───── */
+const SEED=[['المسحوب','ما الوم عين تصطفق بعض الاحيان','شافت غرايل الزمان الغريبة'],['المسحوب','ما ألوم عين تصطفق بعض الأحيان','شافت غرايل الزمان الغريبة']];
+function customs(){
+  let st=[];try{st=JSON.parse(localStorage.getItem('mz')||'[]')}catch(e){}
+  st=st.concat(REMOTE.mz||[]);
+  const map={};
+  SEED.forEach(([n,a,b])=>{(map[n]=map[n]||[]).push(analyze(a).pat,analyze(b).pat)});
+  st.forEach(o=>{(map[o.n]=map[o.n]||[]).push(...o.ps)});
+  return Object.entries(map).map(([n,ps])=>({n,taf:[n],offs:[0],ps:[...new Set(ps)],c:1}));
 }
 
 /* ───── القافية ───── */
@@ -251,23 +304,97 @@ function draw(){
   const rh=rB?rc('الردف',rB.radf)+rc('الروي',rB.rawiy)+rc('الوصل',rB.wasl):'';
   const tas=rA&&rB&&rA.rawiy===rB.rawiy?'<span class="badge" style="color:var(--gold2)">مُصرَّع</span>':'';
   $('out').innerHTML=
-   '<section class="card"><div class="hero"><div><div class="mname">'+m.n+'</div><div class="taf">'+m.taf.join('  ')+'</div>'+
+   '<section class="card"><div class="hero"><div><div class="mname">'+m.n+'</div><div class="taf">'+(m.c?'وزن محفوظ من أبيات اعتمدتها':m.taf.join('  '))+'</div>'+
    '<span class="badge" style="color:'+st[1]+'">'+st[0]+'</span></div><div class="pct">'+pct+'٪<small>درجة التطابق</small></div></div>'+
    det+'<div class="cands">'+S.slice(0,4).map((q,i)=>'<button data-i="'+i+'" class="'+(i===sel?'on':'')+'">'+q.m.n+'</button>').join('')+'</div>'+
+   '<div class="tools"><button id="sv">اعتمد هذا البيت كوزن</button><button id="rs">حذف أوزاني المحفوظة</button></div>'+
    '<div class="leg"><span><i style="background:var(--gold)"></i>متحرك</span><span><i style="border:2px solid var(--blue)"></i>ساكن</span>'+
    '<span><i style="background:var(--bad)"></i>موضع الكسر</span><span>حرف مشطوب: يُكتب ولا يُنطق</span><span>حرف بإطار متقطع: يُنطق ولا يُكتب</span></div></section>'+
    shatr('الصدر',A,s.x,m)+shatr('العجز',B,s.y,m)+
    '<section class="card"><div class="h">الحروف بين الكتابة والنطق</div>'+notes()+'</section>'+
    (rh?'<section class="card"><div class="h">القافية '+tas+'</div><div class="rh">'+rh+'</div></section>':'');
   $('out').querySelectorAll('.cands button').forEach(b=>b.onclick=()=>{sel=+b.dataset.i;draw()});
+  $('sv').onclick=()=>{
+    const n=(prompt('اسم الوزن (مثل: المسحوب، الهلالي، السامري)')||'').trim(); if(!n)return;
+    let st=[];try{st=JSON.parse(localStorage.getItem('mz')||'[]')}catch(e){}
+    st.push({n,ps:[A.pat,B.pat].filter(Boolean)});
+    try{localStorage.setItem('mz',JSON.stringify(st))}catch(e){}
+    run();
+  };
+  $('rs').onclick=()=>{if(confirm('حذف كل الأوزان التي اعتمدتها؟')){try{localStorage.removeItem('mz')}catch(e){}run()}};
 }
 
 function run(){
   A=analyze($('sadr').value);B=analyze($('ajuz').value);
   if(!A.pat&&!B.pat){$('out').innerHTML='<section class="card"><p class="hint" style="margin:0">اكتب شطراً واحداً على الأقل ثم اضغط «حلّل البيت».</p></section>';return}
-  S=METERS.map(m=>{const x=A.pat?align(A.pat,m.p):EMPTY,y=B.pat?align(B.pat,m.p):EMPTY;return{m,x,y,t:x.score+y.score}}).sort((p,q)=>p.t-q.t);
+  const best=(pat,m)=>pat?m.ps.map(p=>align(pat,p)).sort((a,b)=>a.score-b.score)[0]:EMPTY;
+  S=customs().concat(METERS).map(m=>{const x=best(A.pat,m),y=best(B.pat,m);return{m,x,y,t:x.score+y.score}}).sort((p,q)=>p.t-q.t);
   sel=0;draw();
 }
+
+
+/* ───── التدريب على قصائد ───── */
+function lev(a,b){const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+const splitPoem=t=>t.split(/\n/).flatMap(l=>l.split(/\s*[*\/|]\s*|\s{3,}|\t+|\s*\.{3,}\s*|…/)).map(x=>x.trim()).filter(Boolean);
+let ROWS=[];
+function score(){
+  ROWS.forEach((r,i)=>{
+    if(!r.pat){r.d=99;return}
+    let s=0,c=0;ROWS.forEach((q,j)=>{if(i!==j&&q.pat){s+=lev(r.pat,q.pat);c++}});
+    r.d=c?s/c:0;
+  });
+  const ds=ROWS.map(r=>r.d).filter(d=>d<99).sort((a,b)=>a-b),med=ds[Math.floor(ds.length/2)]||0;
+  ROWS.forEach(r=>{r.out=r.d>med+Math.max(2,med*.6);if(!r.man)r.inc=!r.out&&!!r.pat});
+}
+function addW(k,w){const l=ls('mzw','{}');l[k]=w;ss('mzw',l);loadW()}
+function rend(){
+  const inc=ROWS.filter(r=>r.inc),u=new Set(inc.map(r=>r.pat));
+  if(!ROWS.length){$('tr').innerHTML='';return}
+  $('tr').innerHTML='<p class="hint">'+ROWS.length+' شطراً، المعتمد منها '+inc.length+' ('+u.size+' نمطاً مختلفاً). الأشطر المظلّلة بالأحمر بعيدة عن بقية القصيدة، وغالباً فيها كسر أو تشكيل ناقص. صحّحها بالتشكيل داخل الخانة، أو اتركها مستبعدة.</p>'+
+   '<div style="overflow-x:auto"><table class="tb">'+ROWS.map((r,i)=>
+    '<tr class="'+(r.out?'out':'')+'"><td><input type="checkbox" data-c="'+i+'" '+(r.inc?'checked':'')+' aria-label="اعتماد الشطر"></td>'+
+    '<td><input class="t" data-t="'+i+'" value="'+ea(r.text)+'"><div class="pat">'+(r.pat||'').replace(/1/g,'/').replace(/0/g,'o')+'</div></td>'+
+    '<td class="fl">'+(r.out?'بعيد عن الباقي':'')+'</td></tr>').join('')+'</table></div>'+
+   '<div class="btns"><button class="pri" id="tsv">احفظ '+u.size+' نمطاً في الوزن</button></div>';
+  $('tr').querySelectorAll('[data-c]').forEach(c=>c.onchange=()=>{const r=ROWS[+c.dataset.c];r.inc=c.checked;r.man=true;rend()});
+  $('tr').querySelectorAll('[data-t]').forEach(inp=>inp.onchange=()=>{
+    const r=ROWS[+inp.dataset.t],old=r.text.split(/\s+/),nw=inp.value.trim().split(/\s+/);
+    nw.forEach((w,k)=>{const o=old[k];if(o&&HAS.test(w)&&!HAS.test(o)&&w.replace(DIA,'')===o)addW(o,w)});
+    r.text=inp.value.trim();r.pat=analyze(r.text).pat;r.man=false;score();rend();
+  });
+  $('tsv').onclick=()=>{
+    const n=$('tn').value.trim();
+    if(!n){alert('اكتب اسم الوزن أولاً');return}
+    if(!u.size)return;
+    const st=ls('mz','[]');st.push({n,ps:[...u]});ss('mz',st);
+    $('tr').innerHTML='<p class="hint" style="color:var(--ok)">حُفظ '+u.size+' نمطاً تحت «'+esc(n)+'». جرّب بيتاً من نفس الوزن في تبويب التحليل.</p>';
+    ROWS=[];mylist();
+  };
+}
+function mylist(){
+  const m={};ls('mz','[]').forEach(o=>{(m[o.n]=m[o.n]||new Set());o.ps.forEach(p=>m[o.n].add(p))});
+  const nw=Object.keys(ls('mzw','{}')).length;
+  $('tnl').innerHTML=[...new Set(['المسحوب',...Object.keys(m)])].map(n=>'<option value="'+ea(n)+'">').join('');
+  $('ml').innerHTML=(Object.keys(m).length?Object.entries(m).map(([n,q])=>'<div class="mrow"><span><b>'+esc(n)+'</b>: '+q.size+' نمطاً</span><button data-n="'+ea(n)+'">حذف</button></div>').join(''):'<p class="hint" style="margin:0">ما اعتمدت أوزاناً بعد.</p>')+
+    '<div class="mrow"><span>كلمات مشكّلة محفوظة: '+nw+'</span>'+(nw?'<button id="cw">مسح</button>':'')+'</div>';
+  $('ml').querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{ss('mz',ls('mz','[]').filter(o=>o.n!==b.dataset.n));mylist()});
+  if($('cw'))$('cw').onclick=()=>{ss('mzw',{});loadW();mylist()};
+}
+$('tgo').onclick=()=>{ROWS=splitPoem($('tp').value).map(t=>({text:t,pat:analyze(t).pat}));score();rend()};
+$('exp').onclick=()=>{
+  const m={};ls('mz','[]').forEach(o=>{(m[o.n]=m[o.n]||new Set());o.ps.forEach(p=>m[o.n].add(p))});
+  const j={mz:Object.entries(m).map(([n,q])=>({n,ps:[...q]})),mzw:ls('mzw','{}')};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(j)],{type:'application/json'}));a.download='learned.json';a.click();
+};
+$('imp').onclick=()=>$('impf').click();
+$('impf').onchange=e=>{const f=e.target.files[0];if(!f)return;
+  f.text().then(t=>{try{const j=JSON.parse(t);ss('mz',ls('mz','[]').concat(j.mz||[]));ss('mzw',Object.assign(ls('mzw','{}'),j.mzw||{}));loadW();mylist()}catch(err){alert('الملف غير صالح')}})};
+const tab=t=>{$('va').hidden=t!=='A';$('vt').hidden=t!=='T';$('tA').classList.toggle('on',t==='A');$('tT').classList.toggle('on',t==='T')};
+$('tA').onclick=()=>tab('A');
+$('tT').onclick=()=>{tab('T');mylist()};
+loadW();
+fetch('learned.json').then(x=>x.ok?x.json():null).then(j=>{if(j&&typeof j==='object'){REMOTE=Object.assign({mz:[],mzw:{}},j);loadW()}}).catch(()=>{});
 
 $('go').onclick=run;
 $('ex').onclick=()=>{$('sadr').value='يا دار من بعد الأحبّة ما بقى';$('ajuz').value='غير الصدى والريح تنعى والهوى';run()};
