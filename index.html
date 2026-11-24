@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ميزان — محلّل الشعر النبطي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0d17;--ink:#ece6d8;--mu:#8a90a2;--gold:#cfa95f;--gold2:#f0d99c;--bd:rgba(207,169,95,.24);--ok:#5fd3a0;--bad:#ff6b6b;--warn:#f0b35a;--blue:#7d9bd6}
+*{box-sizing:border-box;margin:0}
+body{font-family:Tajawal,system-ui,sans-serif;color:var(--ink);line-height:1.7;min-height:100vh;padding:34px 16px 70px;
+background:radial-gradient(800px 460px at 88% -8%,rgba(207,169,95,.15),transparent),radial-gradient(700px 520px at -5% 30%,rgba(60,80,150,.2),transparent),var(--bg)}
+.wrap{max-width:1000px;margin:auto}
+header{text-align:center;margin-bottom:28px}
+.logo{font:700 72px/1.15 Amiri,serif;background:linear-gradient(120deg,var(--gold2),var(--gold) 55%,#94743a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mu);font-size:17px}
+.orn{width:140px;height:1px;margin:14px auto 12px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.card{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:22px;padding:22px;backdrop-filter:blur(12px);box-shadow:0 30px 70px -40px #000}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.io label{display:block;color:var(--gold);font-weight:700;margin-bottom:6px;font-size:15px}
+textarea{width:100%;min-height:100px;resize:vertical;background:rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 16px;color:var(--ink);font:400 26px/1.9 Amiri,serif;outline:none;transition:border-color .2s,box-shadow .2s}
+textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(207,169,95,.16)}
+.btns{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+button{font:700 15px Tajawal,sans-serif;cursor:pointer;border-radius:12px;padding:11px 24px;border:1px solid var(--bd);background:transparent;color:var(--ink);transition:border-color .2s,filter .2s}
+button:hover{border-color:var(--gold)}
+button:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.pri{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#191204;border:0}
+.pri:hover{filter:brightness(1.08)}
+.hint{color:var(--mu);font-size:13.5px;margin-top:12px}
+#out{margin-top:22px;display:grid;gap:16px}
+.hero{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.mname{font:700 42px/1.2 Amiri,serif;color:var(--gold2)}
+.taf{color:var(--mu);font-size:15px}
+.pct{font:800 38px Tajawal,sans-serif;color:var(--gold);text-align:center;line-height:1}
+.pct small{display:block;font:500 12px Tajawal;color:var(--mu);margin-top:4px}
+.badge{display:inline-block;padding:4px 16px;border-radius:99px;font-weight:700;font-size:14px;border:1px solid;margin-top:6px}
+.cands{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.cands button{padding:6px 14px;font-size:13px}
+.cands .on{border-color:var(--gold);color:var(--gold2);background:rgba(207,169,95,.1)}
+.h{color:var(--gold);font-weight:700;margin-bottom:12px;font-size:15px}
+.row{display:flex;flex-wrap:wrap;gap:14px 10px}
+.g{display:flex;flex-direction:column;align-items:center;gap:5px}
+.gs{display:flex;gap:2px;padding:6px 8px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.07)}
+.gl{font-size:12px;color:var(--mu)}
+.u{display:flex;flex-direction:column;align-items:center;min-width:26px;padding:2px 3px;border-radius:8px}
+.u b{font:400 29px/1.2 Amiri,serif}
+.u i{width:9px;height:9px;border-radius:50%;display:block;margin-top:2px}
+.k1 i{background:var(--gold)}
+.k0 i{border:2px solid var(--blue)}
+.bad{background:rgba(255,107,107,.18);outline:1px solid var(--bad)}
+.xx{outline:1px dashed var(--gold)}
+.xx b{color:var(--gold2)}
+.sl b{text-decoration:line-through;opacity:.35}
+.sl i{visibility:hidden}
+.we{margin-inline-end:12px}
+.ms{color:var(--bad);font-size:20px;align-self:center}
+.pron{font:400 23px Amiri,serif;color:var(--mu);margin-top:12px}
+.pat{font:500 13px monospace;direction:ltr;color:var(--mu);margin-top:4px;letter-spacing:2px;text-align:right}
+.notes{padding-inline-start:18px;color:var(--mu);font-size:14.5px}
+.notes b{color:var(--gold2);font-weight:700}
+.rh{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rh div{background:rgba(0,0,0,.3);border:1px solid var(--bd);border-radius:12px;padding:6px 20px;text-align:center}
+.rh span{display:block;font-size:12px;color:var(--mu)}
+.rh b{font:700 30px Amiri,serif;color:var(--gold2)}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu);margin-top:12px}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin-inline-end:5px}
+footer{text-align:center;color:var(--mu);font-size:13px;margin-top:30px}
+@media(max-width:700px){.io{grid-template-columns:1fr}.logo{font-size:54px}.mname{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1 class="logo">ميزان</h1>
+  <div class="orn"></div>
+  <p class="sub">اكتب البيت وشوف وزنه وتفعيلاته ومواضع الكسر فيه</p>
+</header>
+
+<section class="card">
+  <div class="io">
+    <div><label for="sadr">الصدر</label><textarea id="sadr" spellcheck="false" placeholder="اكتب الشطر الأول هنا"></textarea></div>
+    <div><label for="ajuz">العجز</label><textarea id="ajuz" spellcheck="false" placeholder="اكتب الشطر الثاني هنا"></textarea></div>
+  </div>
+  <div class="btns">
+    <button class="pri" id="go">حلّل البيت</button>
+    <button id="ex">مثال تجريبي</button>
+    <button id="clr">مسح</button>
+  </div>
+  <p class="hint">للدقة أضف التشكيل (الفتحة والضمة والكسرة والسكون والشدّة) في الكلمات الملتبسة، والتحليل يتحدّث مباشرة. اضغط Ctrl + Enter للتحليل السريع.</p>
+</section>
+
+<div id="out"></div>
+<footer>يعمل كاملاً داخل المتصفح، بدون خوادم وبدون API.</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+/* ───── جدول التفعيلات والبحور (1 = متحرك، 0 = ساكن) ───── */
+const T={'فعولن':'11010','مفاعيلن':'1101010','فاعلن':'10110','مستفعلن':'1010110','فاعلاتن':'1011010','مفاعلتن':'1101110','متفاعلن':'1110110','مفعولات':'1010101'};
+const METERS=[
+['الطويل','فعولن مفاعيلن فعولن مفاعيلن'],['المديد','فاعلاتن فاعلن فاعلاتن'],
+['البسيط','مستفعلن فاعلن مستفعلن فاعلن'],['الوافر','مفاعلتن مفاعلتن فعولن'],
+['الكامل','متفاعلن متفاعلن متفاعلن'],['الهزج','مفاعيلن مفاعيلن'],
+['الرجز','مستفعلن مستفعلن مستفعلن'],['الرمل','فاعلاتن فاعلاتن فاعلاتن'],
+['السريع','مستفعلن مستفعلن فاعلن'],['المنسرح','مستفعلن مفعولات مستفعلن'],
+['الخفيف','فاعلاتن مستفعلن فاعلاتن'],['المتقارب','فعولن فعولن فعولن فعولن'],
+['المتدارك','فاعلن فاعلن فاعلن فاعلن'],['المجتث','مستفعلن فاعلاتن']
+].map(([n,t])=>{const taf=t.split(' ');let o=0;const offs=taf.map(x=>{const s=o;o+=T[x].length;return s});return{n,taf,offs,p:taf.map(x=>T[x]).join('')}});
+
+/* ───── طبقة النطق ───── */
+const SH=new Set('تثدذرزسشصضطظلن');
+const PRON={به:'ي',له:'و',فيه:'ي',منه:'و',عنه:'و',عليه:'ي',إليه:'ي',اليه:'ي',معه:'و'};
+const INS={هذا:[1],هذه:[1],ذلك:[1],لكن:[1],الله:[3],الرحمن:[5],إله:[2],اله:[2],طه:[1],هكذا:[1],أولئك:[4],اولئك:[4],هؤلاء:[1]};
+
+function parse(w){
+  const L=[];
+  for(const ch of w){
+    if(/[\u064B-\u0652]/.test(ch)){
+      const l=L[L.length-1]; if(!l)continue;
+      if(ch==='\u0652')l.sk=1; else if(ch==='\u0651')l.sh=1; else if('\u064B\u064C\u064D'.includes(ch))l.tan=1; else l.v=1;
+    }else if(/[\u0621-\u064A]/.test(ch))L.push({c:ch});
+  }
+  return L;
+}
+
+function units(raw){
+  const L=parse(raw); if(!L.length)return null;
+  const key=L.map(l=>l.c).join('').replace(/ى/g,'ي').replace(/ة/g,'ه');
+  if(INS[key])[...INS[key]].reverse().forEach(i=>L.splice(i,0,{c:'ا',x:1}));
+  const n=L.length, art=L[0].c==='ا'&&L[1]&&L[1].c==='ل'&&n>2&&!L[0].x;
+  const U=[];
+  for(let i=0;i<n;i++){
+    const l=L[i],c=l.c,nx=L[i+1],pv=L[i-1],last=i===n-1;
+    if(art&&i===0){U.push({c,k:1,w:1});continue}
+    if(art&&i===1){U.push(SH.has(L[2].c)?{c,k:null,t:'s',n:'لام شمسية: تُكتب ولا تُنطق'}:{c,k:0});continue}
+    if(art&&i===2&&SH.has(c)){U.push({c,k:0},{c,k:1});continue}
+    if(l.x){U.push({c,k:0,t:'x',n:'ألف تُنطق ولا تُكتب'});continue}
+    if(c==='آ'){U.push({c:'أ',k:1},{c:'ا',k:0,t:'m'});continue}
+    if(last&&c==='ا'&&pv&&pv.c==='و'&&n>=4&&!l.v){U.push({c,k:null,t:'s',n:'ألف الجماعة: تُكتب ولا تُنطق'});continue}
+    const al=c==='ا'||c==='ى', wy=c==='و'||c==='ي';
+    const wawa=c==='و'&&i===n-2&&nx&&nx.c==='ا'&&n>=4;
+    if(!l.v&&!l.sh&&i>0&&((al)||(wy&&!(nx&&nx.c==='ا'))||wawa)){U.push({c,k:0,t:'m'});continue}
+    if(l.sh){U.push({c,k:0},{c,k:(l.v||!last)?1:0})}
+    else U.push({c,k:l.sk?0:(l.v?1:(last?0:1))});
+    if(l.tan){U[U.length-1].k=1;U.push({c:'ن',k:0,t:'x',n:'تنوين: نون تُنطق ولا تُكتب'})}
+  }
+  if(PRON[key]){
+    const e=U.filter(u=>u.k!==null); e[e.length-1].k=1;
+    U.push({c:PRON[key],k:0,t:'x',n:'إشباع هاء الضمير: حرف مدّ يُنطق ولا يُكتب'});
+  }
+  return U;
+}
+
+function analyze(txt){
+  const ws=txt.trim().split(/\s+/).filter(Boolean).map(w=>({w,U:units(w)})).filter(o=>o.U);
+  ws.forEach((o,wi)=>{
+    const w=o.U.find(u=>u.w); if(!w)return;
+    let p=null;
+    for(let a=wi-1;a>=0&&!p;a--)for(let b=ws[a].U.length-1;b>=0;b--)if(ws[a].U[b].k!==null){p=ws[a].U[b];break}
+    if(!p)return;
+    w.k=null;w.t='s';w.n='همزة الوصل: تُكتب ولا تُنطق';
+    if(p.k===0){if(p.t==='m'){p.k=null;p.t='s';p.n='مدّ يُختصر قبل «ال»'}else p.k=1}
+  });
+  const pat=ws.flatMap(o=>o.U).filter(u=>u.k!==null).map(u=>u.k).join('');
+  return{ws,pat};
+}
+
+/* ───── المطابقة والمحاذاة ───── */
+const EMPTY={score:0,ops:[],mi:[],miss:{}};
+function align(p,m){
+  const n=p.length,k=m.length,D=[];
+  for(let i=0;i<=n;i++){D[i]=[];for(let j=0;j<=k;j++)D[i][j]=i===0?j:(j===0?i:0)}
+  for(let i=1;i<=n;i++)for(let j=1;j<=k;j++)
+    D[i][j]=Math.min(D[i-1][j-1]+(p[i-1]===m[j-1]?0:1),D[i-1][j]+1,D[i][j-1]+1);
+  let bj=0,bs=1e9;
+  for(let j=0;j<=k;j++){const s=D[n][j]+0.25*(k-j);if(s<bs){bs=s;bj=j}}
+  const ops=Array(n).fill('ok'),mi=Array(n).fill(0),miss={};
+  let i=n,j=bj;
+  while(i>0||j>0){
+    if(i>0&&j>0&&D[i][j]===D[i-1][j-1]+(p[i-1]===m[j-1]?0:1)){ops[i-1]=p[i-1]===m[j-1]?'ok':'sub';mi[i-1]=j-1;i--;j--}
+    else if(i>0&&D[i][j]===D[i-1][j]+1){ops[i-1]='extra';mi[i-1]=Math.max(j-1,0);i--}
+    else{miss[i]=(miss[i]||0)+1;j--}
+  }
+  return{score:bs,ops,mi,miss};
+}
+
+/* ───── القافية ───── */
+function rhyme(ws){
+  const o=ws[ws.length-1]; if(!o)return null;
+  const c=o.U.filter(u=>u.k!==null); if(!c.length)return null;
+  const md=u=>u.t==='m'||(u.t==='x'&&'وي'.includes(u.c)&&u.n.startsWith('إشباع'));
+  let i=c.length-1;const r={};
+  if(md(c[i])&&i>0){r.wasl=c[i].c;i--}
+  r.rawiy=c[i].c;
+  if(i>0&&md(c[i-1]))r.radf=c[i-1].c;
+  return r;
+}
+
+/* ───── العرض ───── */
+let A,B,S,sel=0;
+const badList=(a,al)=>a.ws.flatMap(o=>o.U).filter(u=>u.k!==null).map((u,i)=>al.ops[i]!=='ok'?u.c:null).filter(Boolean);
+const missCount=al=>Object.values(al.miss).reduce((p,q)=>p+q,0);
+
+function shatr(title,a,al,m){
+  if(!a.pat)return'';
+  let ci=0,h='',gc=-1,open=false;
+  const grp=i=>{let g=0;m.offs.forEach((o,q)=>{if(o<=al.mi[i])g=q});return g};
+  const close=()=>{if(open)h+='</div><span class="gl">'+m.taf[gc]+'</span></div>'};
+  const start=g=>{close();gc=g;open=true;h+='<div class="g"><div class="gs">'};
+  a.ws.forEach(o=>o.U.forEach((u,ui)=>{
+    const we=ui===o.U.length-1?' we':'';
+    if(u.k===null){if(!open)start(0);h+='<div class="u sl'+we+'"><b>'+esc(u.c)+'</b><i></i></div>';return}
+    const g=grp(ci);
+    if(!open||g!==gc)start(g);
+    if(al.miss[ci])h+='<span class="ms" title="ينقص مقطع هنا">⌀</span>';
+    h+='<div class="u k'+u.k+(al.ops[ci]!=='ok'?' bad':'')+(u.t==='x'?' xx':'')+we+'"><b>'+esc(u.c)+'</b><i></i></div>';
+    ci++;
+  }));
+  if(al.miss[ci])h+='<span class="ms" title="ينقص مقطع هنا">⌀</span>';
+  close();
+  const said=a.ws.map(o=>o.U.filter(u=>u.k!==null).map(u=>u.c).join('')).join(' ');
+  return '<section class="card"><div class="h">'+title+'</div><div class="row">'+h+'</div>'+
+    '<div class="pron">المنطوق: '+esc(said)+'</div><div class="pat">'+a.pat.replace(/1/g,'/').replace(/0/g,'o')+'</div></section>';
+}
+
+function notes(){
+  const li=[];
+  [['الصدر',A],['العجز',B]].forEach(([t,a])=>a.ws.forEach(o=>{
+    const seen=new Set();
+    o.U.forEach(u=>{if(u.n&&!seen.has(u.n)){seen.add(u.n);li.push('<li><b>'+esc(o.w)+'</b> ('+t+'): '+u.n+'</li>')}});
+  }));
+  return li.length?'<ul class="notes">'+li.join('')+'</ul>':'<p class="hint" style="margin:0">لا توجد حروف صامتة أو مزيدة في هذا البيت.</p>';
+}
+
+function draw(){
+  const s=S[sel],m=s.m,tot=A.pat.length+B.pat.length;
+  const pct=Math.max(0,Math.round(100*(1-s.t/(tot||1))));
+  const bx=badList(A,s.x),by=badList(B,s.y),ms=missCount(s.x)+missCount(s.y),nb=bx.length+by.length+ms;
+  const st=nb===0?['سليم','var(--ok)']:nb<=2?['مقبول مع تسامح','var(--warn)']:['مكسور','var(--bad)'];
+  let det='';
+  if(nb){
+    det='<p class="hint">مواضع الخلل: '+
+      (bx.length?'الصدر ‹'+bx.map(esc).join(' ')+'› ':'')+(by.length?'العجز ‹'+by.map(esc).join(' ')+'› ':'')+
+      (ms?'، وفيه '+ms+' مقطع ناقص (⌀). ':'')+'جرّب تعديل التشكيل أو الكلمة عند هذه المواضع.</p>';
+  }
+  const rA=rhyme(A.ws),rB=rhyme(B.ws);
+  const rc=(l,v)=>v?'<div><span>'+l+'</span><b>'+esc(v)+'</b></div>':'';
+  const rh=rB?rc('الردف',rB.radf)+rc('الروي',rB.rawiy)+rc('الوصل',rB.wasl):'';
+  const tas=rA&&rB&&rA.rawiy===rB.rawiy?'<span class="badge" style="color:var(--gold2)">مُصرَّع</span>':'';
+  $('out').innerHTML=
+   '<section class="card"><div class="hero"><div><div class="mname">'+m.n+'</div><div class="taf">'+m.taf.join('  ')+'</div>'+
+   '<span class="badge" style="color:'+st[1]+'">'+st[0]+'</span></div><div class="pct">'+pct+'٪<small>درجة التطابق</small></div></div>'+
+   det+'<div class="cands">'+S.slice(0,4).map((q,i)=>'<button data-i="'+i+'" class="'+(i===sel?'on':'')+'">'+q.m.n+'</button>').join('')+'</div>'+
+   '<div class="leg"><span><i style="background:var(--gold)"></i>متحرك</span><span><i style="border:2px solid var(--blue)"></i>ساكن</span>'+
+   '<span><i style="background:var(--bad)"></i>موضع الكسر</span><span>حرف مشطوب: يُكتب ولا يُنطق</span><span>حرف بإطار متقطع: يُنطق ولا يُكتب</span></div></section>'+
+   shatr('الصدر',A,s.x,m)+shatr('العجز',B,s.y,m)+
+   '<section class="card"><div class="h">الحروف بين الكتابة والنطق</div>'+notes()+'</section>'+
+   (rh?'<section class="card"><div class="h">القافية '+tas+'</div><div class="rh">'+rh+'</div></section>':'');
+  $('out').querySelectorAll('.cands button').forEach(b=>b.onclick=()=>{sel=+b.dataset.i;draw()});
+}
+
+function run(){
+  A=analyze($('sadr').value);B=analyze($('ajuz').value);
+  if(!A.pat&&!B.pat){$('out').innerHTML='<section class="card"><p class="hint" style="margin:0">اكتب شطراً واحداً على الأقل ثم اضغط «حلّل البيت».</p></section>';return}
+  S=METERS.map(m=>{const x=A.pat?align(A.pat,m.p):EMPTY,y=B.pat?align(B.pat,m.p):EMPTY;return{m,x,y,t:x.score+y.score}}).sort((p,q)=>p.t-q.t);
+  sel=0;draw();
+}
+
+$('go').onclick=run;
+$('ex').onclick=()=>{$('sadr').value='يا دار من بعد الأحبّة ما بقى';$('ajuz').value='غير الصدى والريح تنعى والهوى';run()};
+$('clr').onclick=()=>{$('sadr').value='';$('ajuz').value='';$('out').innerHTML=''};
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')run()});
+</script>
+</body>
+</html>
